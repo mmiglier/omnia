@@ -9,6 +9,10 @@ import (
 )
 
 func Deploy(omniafileName string, omniaDir string) error {
+	projectDir, err := os.Getwd()
+	if err != nil {
+		return errors.Wrap(err, "Failed to get working directory")
+	}
 	if err := os.Chdir(omniaDir); err != nil {
 		return errors.Wrapf(err, "Failed to change directory to %s", omniaDir)
 	}
@@ -24,6 +28,10 @@ func Deploy(omniafileName string, omniaDir string) error {
 
 	if err = prov.Deploy(); err != nil {
 		return errors.Wrap(err, "Failed to deploy")
+	}
+
+	if err := os.Chdir(projectDir); err != nil {
+		return errors.Wrapf(err, "Failed to change directory to %s", projectDir)
 	}
 
 	return nil
