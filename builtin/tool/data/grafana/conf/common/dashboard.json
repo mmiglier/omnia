@@ -1,0 +1,34 @@
+{
+  "dashboard": {
+    "annotations": {
+      "list": []
+    },
+    "editable": true,
+    "gnetId": null,
+    "hideControls": false,
+    "id": null,
+    "links": [],
+    "title": "Default",
+    "tags": [
+      "omnia"
+    ],
+    "timezone": "browser",
+    "refresh": "5s",
+    "rows": [
+      {
+        "collapse": false,
+        "editable": true,
+        "height": "250px",
+        "panels": [],
+        "title": "Default Row"
+      }
+    ],
+    "schemaVersion": 6,
+    "version": 0,
+    "time": {
+      "from": "now-15m",
+      "to": "now"
+    }
+  },
+  "overwrite": false
+}

@@ -1,0 +1,21 @@
+{%- if contains .Links "prometheus" %}
+{
+  "name": "Prometheus",
+  "type": "prometheus",
+  "url": "http://prometheus:9090",
+  "access": "proxy",
+  "isDefault": true
+}
+{%- else if contains .Links "graphite" %}
+{
+  "name": "Graphite",
+  "type": "graphite",
+  "url": "http://graphite:8888",
+  "access": "proxy",
+  "isDefault": true,
+  "basicAuth": true,
+  "basicAuthUser": "admin",
+  "basicAuthPassword": "admin",
+  "withCredentials": true
+}
+{% end -%}

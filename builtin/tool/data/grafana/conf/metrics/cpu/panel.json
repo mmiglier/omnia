@@ -1,0 +1,84 @@
+{
+    "aliasColors": {},
+    "bars": false,
+    "datasource": null,
+    "editable": true,
+    "error": false,
+    "fill": 1,
+    "grid": {
+        "threshold1": null,
+        "threshold1Color": "rgba(216, 200, 27, 0.27)",
+        "threshold2": null,
+        "threshold2Color": "rgba(234, 112, 112, 0.22)"
+    },
+    "id": 1,
+    "isNew": true,
+    "legend": {
+        "alignAsTable": false,
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "rightSide": false,
+        "show": true,
+        "total": false,
+        "values": false
+    },
+    "lines": true,
+    "linewidth": 2,
+    "links": [],
+    "nullPointMode": "connected",
+    "percentage": false,
+    "pointradius": 5,
+    "points": false,
+    "renderer": "flot",
+    "seriesOverrides": [],
+    "span": 6,
+    "stack": false,
+    "steppedLine": false,
+    "targets": [
+        {
+            {% if contains .Links "prometheus" %}
+            "expr": "sum(collectd_cpu_percent{cpu=~\"user|system\"}) by (exported_instance)",
+            "legendFormat": "{{exported_instance}}",
+            "intervalFactor": 2,
+            "step": 2,
+            {% else if contains .Links "graphite" %}
+            "hide": false,
+            "target": "groupByNode(hosts.*.cpu.{user,system}, 1, 'sum')",
+            {% end %}
+            "refId": "A"
+        }
+    ],
+    "timeFrom": null,
+    "timeShift": null,
+    "title": "Hosts CPU",
+    "tooltip": {
+        "msResolution": false,
+        "shared": true,
+        "sort": 0,
+        "value_type": "cumulative"
+    },
+    "type": "graph",
+    "xaxis": {
+        "show": true
+    },
+    "yaxes": [
+        {
+            "format": "percent",
+            "label": "",
+            "logBase": 1,
+            "max": 100,
+            "min": 0,
+            "show": true
+        },
+        {
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+        }
+    ]
+}

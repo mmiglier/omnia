@@ -1,0 +1,13 @@
+global:
+  scrape_interval:     5s
+  evaluation_interval: 5s
+
+scrape_configs:
+  - job_name: 'prometheus' # prometheus monitors itself
+    static_configs:
+      - targets: ['localhost:9090']
+{%- if contains .Links "prom-collectd-exporter" %}
+  - job_name: 'collectd' # scaping from collectd exporter
+    static_configs:
+      - targets: ['prom-collectd-exporter:9103']
+{% end %}
