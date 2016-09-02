@@ -1,8 +1,7 @@
 BINARY=omnia
 
 VERSION=0.1
-# BUILD=`date +%FT%T%z`
-BUILD=`git rev-parse HEAD`
+BUILD=`git rev-parse --short HEAD`
 
 LDFLAGS=-ldflags "-X main.Version=${VERSION} -X main.Build=${BUILD}"
 

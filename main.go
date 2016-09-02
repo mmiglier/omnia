@@ -4,6 +4,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"os"
 
@@ -19,9 +20,11 @@ func main() {
 
 func realMain() int {
 
+	var version bool
 	var compile bool
 	var deploy bool
 
+	flag.BoolVar(&version, "version", false, "Print version information and quit")
 	flag.BoolVar(&compile, "compile", false, "Create omnia infrastructure code")
 	flag.BoolVar(&deploy, "deploy", false, "Deploy omnia infrastructure")
 
@@ -30,6 +33,11 @@ func realMain() int {
 	if len(os.Args) < 2 {
 		flag.Usage()
 		return 1
+	}
+
+	if version {
+		fmt.Printf("Omnia version %s, build %s\n", Version, Build)
+		return 0
 	}
 
 	if compile {
