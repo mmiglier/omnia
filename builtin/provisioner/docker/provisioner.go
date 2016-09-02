@@ -3,7 +3,6 @@ package docker
 //go:generate go-bindata -pkg $GOPACKAGE -o data.go data/...
 
 import (
-	"log"
 	"os"
 	"os/exec"
 
@@ -84,10 +83,15 @@ func (Provisioner) Compile(provisionerData provisioner.ProvisionerData, destDir 
 }
 
 func (Provisioner) Deploy() error {
-	out, err := exec.Command("date").Output()
-	if err != nil {
-		return errors.Wrapf(err, "Failed to execute date")
+	if err := exec.Command("docker-compose", "up", "--build", "-d").Run(); err != nil {
+		return err
 	}
-	log.Printf("The date is %s", out)
+	return nil
+}
+
+func (Provisioner) Stop() error {
+	if err := exec.Command("docker-compose", "stop").Run(); err != nil {
+		return err
+	}
 	return nil
 }

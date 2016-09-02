@@ -23,10 +23,12 @@ func realMain() int {
 	var version bool
 	var compile bool
 	var deploy bool
+	var stop bool
 
 	flag.BoolVar(&version, "version", false, "Print version information and quit")
 	flag.BoolVar(&compile, "compile", false, "Create omnia infrastructure code")
 	flag.BoolVar(&deploy, "deploy", false, "Deploy omnia infrastructure")
+	flag.BoolVar(&stop, "stop", false, "Stop omnia infrastructure")
 
 	flag.Parse()
 
@@ -51,6 +53,14 @@ func realMain() int {
 	if deploy {
 		log.Println("Deploying...")
 		if err := command.Deploy(omniafileName, omniaDir); err != nil {
+			log.Fatal("Error: ", err)
+		}
+		log.Println("Done!")
+	}
+
+	if stop {
+		log.Println("Stopping...")
+		if err := command.Stop(omniafileName, omniaDir); err != nil {
 			log.Fatal("Error: ", err)
 		}
 		log.Println("Done!")
