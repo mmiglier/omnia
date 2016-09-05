@@ -8,6 +8,7 @@ import (
 	"github.com/mmiglier/omnia/builtin/tool"
 	"github.com/mmiglier/omnia/omniafile"
 	"github.com/mmiglier/omnia/provisioner"
+	"github.com/pkg/errors"
 )
 
 const toolsBindataDir string = "builtin/tool/data"
@@ -17,6 +18,10 @@ func Compile(omniafileName string, omniaDir string) error {
 	ofile := omniafile.Omniafile{}
 	if err := ofile.Load(omniafileName); err != nil {
 		return err
+	}
+
+	if err := os.MkdirAll(omniaDir, 0755); err != nil {
+		return errors.Wrapf(err, `Failed to create omnia directory "%s"`, omniaDir)
 	}
 
 	if err := ofile.SaveTo(omniaDir + "/" + omniafileName); err != nil {
@@ -51,7 +56,7 @@ func buildProvisionerData(ofile omniafile.Omniafile) (provisioner.ProvisionerDat
 		currToolBindataDir := toolsBindataDir + "/" + toolName
 
 		var portsFile []byte
-		var ports []int
+		var ports provisioner.ToolPorts
 
 		portsFile, err := tool.Asset(currToolBindataDir + "/ports.yml")
 		if !os.IsNotExist(err) {

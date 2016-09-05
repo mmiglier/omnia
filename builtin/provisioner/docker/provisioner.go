@@ -3,6 +3,9 @@ package docker
 //go:generate go-bindata -pkg $GOPACKAGE -o data.go data/...
 
 import (
+	"bufio"
+	"fmt"
+	"log"
 	"os"
 	"os/exec"
 
@@ -83,8 +86,23 @@ func (Provisioner) Compile(provisionerData provisioner.ProvisionerData, destDir 
 }
 
 func (Provisioner) Deploy() error {
-	if err := exec.Command("docker-compose", "up", "--build", "-d").Run(); err != nil {
-		return err
+	log.Println(`Executing "docker-compose up --build -d command". Output follows:`)
+	cmd := exec.Command("docker-compose", "up", "--build", "-d")
+	stdout, err := cmd.StdoutPipe()
+	if err != nil {
+		return errors.Wrap(err, "Failed to retrieve stdout pipe from deploy command")
+	}
+	scanner := bufio.NewScanner(stdout)
+	go func() {
+		for scanner.Scan() {
+			fmt.Printf("\t%s\n", scanner.Text())
+		}
+	}()
+	if err := cmd.Start(); err != nil {
+		return errors.Wrap(err, "Failed to start deploy command")
+	}
+	if err := cmd.Wait(); err != nil {
+		return errors.Wrap(err, "Failed to wait for deploy command to finish")
 	}
 	return nil
 }

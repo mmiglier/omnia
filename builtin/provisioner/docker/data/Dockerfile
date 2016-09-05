@@ -7,10 +7,13 @@ COPY setup.sh /tmp/setup.sh
 RUN chmod +x /tmp/setup.sh
 RUN /tmp/setup.sh
 
-{% if .Ports -%}
-EXPOSE{% range .Ports %} {% . %}{% end %}
+{% if .Ports.Expose %}{% range .Ports.Expose -%}
+EXPOSE {% . %}
+{% end %}{% end -%}
+{% if .Ports.Publish %}{% range .Ports.Publish -%}
+EXPOSE {% . %}
+{% end %}{% end -%}
 
-{% end -%}
 COPY run.sh /usr/local/bin/run.sh
 RUN chmod +x /usr/local/bin/run.sh
 

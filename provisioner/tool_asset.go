@@ -8,7 +8,7 @@ type ProvisionerData struct {
 type ToolAsset struct {
 	Name        string
 	IsAgent     bool
-	Ports       []int
+	Ports       ToolPorts
 	Links       []string
 	Linked      []string
 	SetupScript []byte
@@ -19,4 +19,9 @@ type ToolAsset struct {
 type ToolConf struct {
 	Common  map[string][]byte
 	Metrics map[string]map[string][]byte
+}
+
+type ToolPorts struct {
+	Expose  []int
+	Publish []int
 }

@@ -1,25 +1,29 @@
 version: '2'
+networks:
+  omnia:
 services:
-{%- $args := .Args %}{% range .ToolsAssets %}
-    {% .Name %}:
-        build: ./{% .Name %}
-        image: {% index $args "rigistry_username" %}/omnia-{% .Name %}:{% index $args "images_tag" %}
-    {%- if .Ports %}
-        ports:
-        {%- range .Ports %}
-            - "{% . %}:{% . %}"
-        {%- end %}
+{%- $args := .Args %}
+{%- range .ToolsAssets %}
+  {% .Name %}:
+    build: ./{% .Name %}
+    image: {% index $args "rigistry_username" %}/omnia-{% .Name %}:{% index $args "images_tag" %}
+    {%- if .Ports.Publish %}
+    ports:
+      {%- range .Ports.Publish %}
+      - "{% . %}:{% . %}"
+      {%- end %}
     {%- end %}
-    {%- if .Links %}
-        links:
-        {%- range .Links %}
-            - {% . %}
+    networks:
+      omnia:
+        {%- if .IsAgent %}
+        aliases:
+          - omnia
         {%- end %}
-    {%- end %}
     {%- if .IsAgent %}
-        volumes:
-            - "/var/run/docker.sock:/var/run/docker.sock"
-            - "/proc:/mnt/proc:ro"
-            - "/etc/hostname:/mnt/hostname:ro"
-        privileged: true
-    {%- end %}{% end %}
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "/proc:/mnt/proc:ro"
+      - "/etc/hostname:/mnt/hostname:ro"
+    privileged: true
+    {%- end %}
+{%- end %}
